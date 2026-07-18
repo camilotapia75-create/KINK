@@ -113,6 +113,12 @@ h1, h2, h3, h4 { font-weight: 700; line-height: 1.2; }
     linear-gradient(160deg, #2a0507, #4a080c 45%, #12060a);
   padding: 90px 24px 70px;
 }
+#hero-canvas, .hero-video {
+  position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0;
+}
+.hero-video { object-fit: cover; }
+#hero-canvas { pointer-events: none; z-index: 1; }
+.hero-content { position: relative; z-index: 2; will-change: transform; }
 .hero .logo-mark { margin: 0 auto 26px; }
 .hero h1 {
   font-size: clamp(2.4rem, 6vw, 4.6rem); letter-spacing: .04em;

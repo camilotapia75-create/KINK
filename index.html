@@ -14,11 +14,14 @@
 <header id="site-header"></header>
 
 <main>
-  <section class="hero wrap">
-    <span class="logo-mark">DK</span>
-    <h1>Rule Your Dungeon</h1>
-    <span class="sub">DUNGEON-GRADE GEAR FROM <b>DUNGEONKING</b></span>
-    <div><a class="btn" href="category.html?c=best-sellers">SHOP NOW</a></div>
+  <section class="hero wrap" id="hero">
+    <canvas id="hero-canvas" aria-hidden="true"></canvas>
+    <div class="hero-content">
+      <span class="logo-mark">DK</span>
+      <h1>Rule Your Dungeon</h1>
+      <span class="sub">DUNGEON-GRADE GEAR FROM <b>DUNGEONKING</b></span>
+      <div><a class="btn" href="category.html?c=best-sellers">SHOP NOW</a></div>
+    </div>
   </section>
 
   <div class="wrap">
@@ -44,6 +47,7 @@
 <footer id="site-footer"></footer>
 <script src="assets/js/data.js"></script>
 <script src="assets/js/app.js"></script>
+<script src="assets/js/hero-fx.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const cats = NAV.filter((c) => c.blurb).slice(0, 6);
