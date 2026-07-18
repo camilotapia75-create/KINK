@@ -2,7 +2,6 @@
    DKFX.mount(container, opts) drops a live scene into any element:
    - stable-fluids smoke (semi-Lagrangian advection + Jacobi projection)
      that idles as a rising plume and swirls along the cursor's drag
-   - hanging chains (damped pendulums) shoved by the cursor
    - rising embers repelled by the cursor
    - a spotlight that follows the pointer + content parallax
    - optional video layer underneath (opts.video), mouse-parallaxed;
@@ -143,48 +142,11 @@
     container.addEventListener("mouseleave", () => { mouse.active = false; });
     container.addEventListener("touchmove", (e) => track(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
 
-    /* ---------- chains & embers ---------- */
-    const chains = (opts.chains === false ? [] : [0.09, 0.26, 0.76, 0.93]).map((fx, i) => ({
-      fx, len: 0.5 + (i % 2) * 0.24, a: (i - 1.5) * 0.04, va: 0,
-    }));
+    /* ---------- embers ---------- */
     const embers = Array.from({ length: 55 }, () => ({
       x: Math.random(), y: Math.random(), s: 0.6 + Math.random() * 1.7,
       vy: 0.0004 + Math.random() * 0.001, drift: Math.random() * 6.28, ox: 0, ovx: 0,
     }));
-
-    /* alternating front-facing rings and edge-on links, metallic two-pass stroke */
-    function drawChain(c, ax, ay, L) {
-      const linkLen = 15, rx = 5.2, overlap = 0.72;
-      const n = Math.ceil(L / (linkLen * overlap));
-      for (let i = 0; i < n; i++) {
-        const q = (i * linkLen * overlap + linkLen / 2) / L;
-        if (q > 1) break;
-        const bend = c.a * (0.4 + 0.6 * q);
-        const lx = ax + Math.sin(bend) * L * q;
-        const ly = ay + Math.cos(bend) * L * q;
-        ctx.save();
-        ctx.translate(lx, ly);
-        ctx.rotate(-bend);
-        if (i % 2 === 0) {
-          ctx.beginPath();
-          ctx.ellipse(0, 0, rx, linkLen / 2, 0, 0, 6.29);
-          ctx.lineWidth = 4.6; ctx.strokeStyle = "rgba(20,16,18,.85)"; ctx.stroke();
-          ctx.lineWidth = 2.4; ctx.strokeStyle = "rgba(196,190,198,.95)"; ctx.stroke();
-          ctx.beginPath();
-          ctx.ellipse(0, 0, rx, linkLen / 2, 0, -2.4, -0.7);
-          ctx.lineWidth = 1.1; ctx.strokeStyle = "rgba(255,255,255,.85)"; ctx.stroke();
-        } else {
-          ctx.beginPath();
-          ctx.moveTo(0, -linkLen / 2 + 3.4);
-          ctx.lineTo(0, linkLen / 2 - 3.4);
-          ctx.lineCap = "round";
-          ctx.lineWidth = 6.4; ctx.strokeStyle = "rgba(20,16,18,.85)"; ctx.stroke();
-          ctx.lineWidth = 4; ctx.strokeStyle = "rgba(148,142,152,.95)"; ctx.stroke();
-          ctx.lineWidth = 1.4; ctx.strokeStyle = "rgba(235,232,240,.8)"; ctx.stroke();
-        }
-        ctx.restore();
-      }
-    }
 
     const content = opts.content ? container.querySelector(opts.content) : null;
     let t = 0, running = true;
@@ -215,20 +177,6 @@
       ctx.clearRect(0, 0, W, H);
       drawDye();
 
-      for (const c of chains) {
-        const ax = c.fx * W - cx * 60, ay = -8;
-        const L = c.len * H;
-        let force = -0.9 * Math.sin(c.a) * 0.016 + Math.sin(t * 0.5 + c.fx * 9) * 0.00015;
-        const tipX = ax + Math.sin(c.a) * L, tipY = ay + Math.cos(c.a) * L;
-        for (const [px2, py2] of [[tipX, tipY], [(ax + tipX) / 2, (ay + tipY) / 2]]) {
-          const dx2 = px2 - mx, dy2 = py2 - my, d = Math.hypot(dx2, dy2);
-          if (d < 130) force += (dx2 > 0 ? 1 : -1) * (1 - d / 130) * 0.0045;
-        }
-        c.va = (c.va + force) * 0.985;
-        c.a += c.va;
-        drawChain(c, ax, ay, L);
-      }
-
       for (const e of embers) {
         e.y -= e.vy; e.drift += 0.02;
         if (e.y < -0.05) { e.y = 1.05; e.x = Math.random(); }
@@ -252,7 +200,7 @@
       ctx.fillRect(0, 0, W, H);
 
       if (content) content.style.transform = `translate(${-cx * 22}px, ${-cy * 14}px)`;
-      if (videoEl) videoEl.style.transform = `scale(1.12) translate(${-cx * 26}px, ${-cy * 18}px)`;
+      if (videoEl) videoEl.style.transform = `scale(1.04) translate(${-cx * 10}px, ${-cy * 7}px)`;
     }
     frame();
   }
