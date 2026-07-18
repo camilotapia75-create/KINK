@@ -15,6 +15,7 @@ const STORE = {
     { strong: "101 Day King's Promise", text: "Return Policy" },
   ],
   promoLine: "SALE ENDING! Xtra 20% Off Now - use code: HEAT",
+  heroVideo: "assets/video/hero.mp4",
   coupons: { HEAT: 20, WELCOME10: 10 },
   shippingMethods: [
     { id: "standard", name: "Standard Shipping (3-6 days)", price: 6.95, freeOverThreshold: true },

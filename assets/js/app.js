@@ -264,6 +264,8 @@ function ageGate() {
         </div>
       </div>
     </div>`);
+  /* full interactive scene (video + fluid smoke + chains) behind the modal */
+  if (window.DKFX) DKFX.mount($("#age-gate"), { video: STORE.heroVideo, content: ".age-box" });
   $("#age-yes").addEventListener("click", () => {
     localStorage.setItem("dk_adult", "yes");
     $("#age-gate").remove();

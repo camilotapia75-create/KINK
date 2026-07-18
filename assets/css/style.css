@@ -113,11 +113,11 @@ h1, h2, h3, h4 { font-weight: 700; line-height: 1.2; }
     linear-gradient(160deg, #2a0507, #4a080c 45%, #12060a);
   padding: 90px 24px 70px;
 }
-#hero-canvas, .hero-video {
+.fx-canvas, .fx-video {
   position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0;
 }
-.hero-video { object-fit: cover; }
-#hero-canvas { pointer-events: none; z-index: 1; }
+.fx-video { object-fit: cover; }
+.fx-canvas { pointer-events: none; z-index: 1; }
 .hero-content { position: relative; z-index: 2; will-change: transform; }
 .hero .logo-mark { margin: 0 auto 26px; }
 .hero h1 {
@@ -365,12 +365,19 @@ footer { background: var(--black); margin-top: 70px; padding: 60px 0 30px; }
 
 /* ---------- overlays ---------- */
 .age-gate {
-  position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,.92);
+  position: fixed; inset: 0; z-index: 200; overflow: hidden;
+  background:
+    radial-gradient(110% 100% at 80% 20%, rgba(120,10,15,.7), transparent 60%),
+    radial-gradient(90% 110% at 15% 80%, rgba(70,0,5,.85), transparent 65%),
+    #0a0507;
   display: flex; align-items: center; justify-content: center; padding: 20px;
 }
 .age-box {
-  background: #181818; border: 1px solid var(--line); border-radius: 10px;
+  position: relative; z-index: 2; will-change: transform;
+  background: rgba(16,14,15,.88); backdrop-filter: blur(6px);
+  border: 1px solid var(--line); border-radius: 10px;
   max-width: 460px; text-align: center; padding: 44px 36px;
+  box-shadow: 0 30px 80px rgba(0,0,0,.7);
 }
 .age-box h2 { font-size: 1.9rem; margin-bottom: 12px; }
 .age-box p { color: var(--muted); margin-bottom: 26px; }
