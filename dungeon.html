@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dungeons — Book a Session or Build Your Own — DungeonKing</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%23c1272d'/%3E%3Ctext x='50' y='68' font-size='50' font-weight='bold' text-anchor='middle' fill='white' font-family='sans-serif'%3EDK%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main>
+  <section class="svc-banner" id="svc-banner">
+    <div class="hero-content">
+      <h1>Dungeons by DungeonKing</h1>
+      <p>Rent one of ours by the hour — or have us build yours, anywhere.</p>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="tabs" role="tablist">
+      <button class="tab-btn active" id="tab-book" role="tab">Book a Session</button>
+      <button class="tab-btn" id="tab-build" role="tab">Build Your Dungeon</button>
+    </div>
+
+    <!-- ============ BOOK A SESSION ============ -->
+    <section id="panel-book">
+      <div class="section-head">
+        <h2>Book a Private Session</h2>
+        <p>Fully equipped, professionally cleaned, absolutely private. 18+ with valid ID at check-in.</p>
+      </div>
+      <div class="svc-grid" id="dungeon-cards"></div>
+
+      <div class="two-col">
+        <form id="book-form">
+          <h2 style="margin-bottom:14px">Session details</h2>
+          <div class="field"><label class="f-label">Dungeon</label>
+            <select id="bk-dungeon"></select>
+          </div>
+          <div class="field field-row">
+            <span><label class="f-label">Date</label><input type="date" id="bk-date" required></span>
+            <span><label class="f-label">Start time</label><select id="bk-time"></select></span>
+          </div>
+          <div class="field field-row">
+            <span><label class="f-label">Duration</label><select id="bk-hours"></select></span>
+            <span><label class="f-label">Guests</label><select id="bk-guests"><option>1</option><option selected>2</option><option>3</option><option>4</option></select></span>
+          </div>
+          <div class="field field-row">
+            <input placeholder="Your name" id="bk-name" required>
+            <input type="email" placeholder="Email" id="bk-email" required>
+          </div>
+          <div class="field"><textarea id="bk-notes" rows="3" placeholder="Anything we should prepare? (equipment requests, accessibility, first visit…)" style="width:100%;background:#222;color:var(--text);border:1px solid var(--line);border-radius:6px;padding:14px 16px"></textarea></div>
+          <label class="check"><input type="checkbox" required> I am 18+ and agree to the house rules (safewords honored, no photography of other guests, leave it cleaner than you found it)</label>
+          <button class="btn btn-red" type="submit">Reserve session</button>
+        </form>
+        <div class="summary-card" id="book-summary"></div>
+      </div>
+    </section>
+
+    <!-- ============ BUILD YOUR DUNGEON ============ -->
+    <section id="panel-build" hidden>
+      <div class="section-head">
+        <h2>We Build Dungeons</h2>
+        <p>From a convertible spare room to a full commercial playspace — designed, built and installed by the DungeonKing crew.</p>
+      </div>
+      <div class="build-steps">
+        <div><b>1 · Consult</b><p>A discreet call about your space, wishlist and budget. Free.</p></div>
+        <div><b>2 · Design</b><p>3D layout, materials and fixed quote. Load-rated hard points, always.</p></div>
+        <div><b>3 · Build</b><p>Our crew builds and installs. Plain vans, plain invoices, NDA standard.</p></div>
+      </div>
+
+      <div class="two-col">
+        <form id="build-form">
+          <h2 style="margin-bottom:14px">Request a build consultation</h2>
+          <div class="field field-row">
+            <input placeholder="Your name" id="bd-name" required>
+            <input type="email" placeholder="Email" id="bd-email" required>
+          </div>
+          <div class="field field-row">
+            <input placeholder="City / location" id="bd-city" required>
+            <input type="tel" placeholder="Phone (optional)" id="bd-phone">
+          </div>
+          <div class="field field-row">
+            <span><label class="f-label">Space type</label><select id="bd-space"></select></span>
+            <span><label class="f-label">Approx. size</label><select id="bd-size"><option>Under 150 sq ft</option><option selected>150–400 sq ft</option><option>400–800 sq ft</option><option>800+ sq ft</option></select></span>
+          </div>
+          <div class="field field-row">
+            <span><label class="f-label">Budget</label><select id="bd-budget"></select></span>
+            <span><label class="f-label">Timeline</label><select id="bd-when"><option>As soon as possible</option><option selected>1–3 months</option><option>3–6 months</option><option>Just exploring</option></select></span>
+          </div>
+          <label class="f-label" style="margin:6px 0 10px;display:block">What should it include?</label>
+          <div class="feature-checks" id="bd-features"></div>
+          <div class="field" style="margin-top:14px"><textarea id="bd-notes" rows="3" placeholder="Tell us about the space and the dream…" style="width:100%;background:#222;color:var(--text);border:1px solid var(--line);border-radius:6px;padding:14px 16px"></textarea></div>
+          <button class="btn btn-red" type="submit">Request consultation</button>
+        </form>
+        <div class="summary-card">
+          <h3 style="margin-bottom:14px">Why DungeonKing builds</h3>
+          <p style="display:block;color:var(--muted)">Every rig and hard point is load-tested and certified. Materials are body-safe and cleanable. Discretion is absolute — unmarked crew, NDAs by default, and convertible designs that disappear when guests visit.</p>
+          <p style="display:block;margin-top:14px;color:var(--muted)">Typical projects run <b style="color:var(--gold)">$5k–$40k</b> and take 2–6 weeks on site.</p>
+          <div class="assure" style="margin-top:18px">👷<br>Licensed &amp; insured crew<br>Certified load-rated rigging<br>NDA standard on every job</div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer id="site-footer"></footer>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/hero-fx.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  DKFX.mount($("#svc-banner"), { video: STORE.heroVideo, content: ".hero-content" });
+
+  /* ---------- tabs ---------- */
+  function showTab(which) {
+    $("#panel-book").hidden = which !== "book";
+    $("#panel-build").hidden = which !== "build";
+    $("#tab-book").classList.toggle("active", which === "book");
+    $("#tab-build").classList.toggle("active", which === "build");
+  }
+  $("#tab-book").addEventListener("click", () => showTab("book"));
+  $("#tab-build").addEventListener("click", () => showTab("build"));
+  const tabFromHash = () => showTab(location.hash === "#build" ? "build" : "book");
+  addEventListener("hashchange", tabFromHash);
+  if (location.hash === "#build") tabFromHash();
+
+  /* ---------- booking ---------- */
+  $("#dungeon-cards").innerHTML = DUNGEONS.map((d) => `
+    <div class="svc-card" data-id="${d.id}">
+      <img src="${imgFor(d, 1)}" alt="">
+      <div class="svc-body">
+        <h3>${d.name}</h3>
+        <p class="svc-city">${d.city}</p>
+        <p class="svc-blurb">${d.blurb}</p>
+        <p class="svc-feats">${d.features.join(" · ")}</p>
+        <p class="svc-rate"><b>${money(d.rate)}</b>/hour</p>
+        <button class="btn btn-red small" type="button">Book this dungeon</button>
+      </div>
+    </div>`).join("");
+
+  $("#bk-dungeon").innerHTML = DUNGEONS.map((d) => `<option value="${d.id}">${d.name} — ${d.city} (${money(d.rate)}/hr)</option>`).join("");
+  $("#bk-time").innerHTML = Array.from({ length: 13 }, (_, i) => { const h = 10 + i; return `<option>${h}:00</option>`; }).join("");
+  $("#bk-hours").innerHTML = SESSION_DURATIONS.map((h) => `<option value="${h}">${h} hours</option>`).join("");
+  $("#bk-date").min = new Date().toISOString().slice(0, 10);
+
+  $$(".svc-card button").forEach((b) => b.addEventListener("click", () => {
+    $("#bk-dungeon").value = b.closest(".svc-card").dataset.id;
+    drawBookSummary();
+    $("#book-form").scrollIntoView({ behavior: "smooth" });
+  }));
+
+  function drawBookSummary() {
+    const d = DUNGEONS.find((x) => x.id === $("#bk-dungeon").value) || DUNGEONS[0];
+    const hours = +$("#bk-hours").value || SESSION_DURATIONS[0];
+    const total = d.rate * hours;
+    $("#book-summary").innerHTML = `
+      <h3 style="margin-bottom:14px">Your reservation</h3>
+      <p><span>${d.name}</span><span>${d.city}</span></p>
+      <p><span>${hours} hours × ${money(d.rate)}</span><span>${money(total)}</span></p>
+      <p><span>Cleaning &amp; linens</span><span>Included</span></p>
+      <p class="tot"><span>Due today (deposit 25%)</span><span>${money(total * 0.25)}</span></p>
+      <p style="display:block;color:var(--muted);font-size:.88rem">Balance due at check-in. Free cancellation up to 48h before your session.</p>`;
+  }
+  ["bk-dungeon", "bk-hours"].forEach((id) => $("#" + id).addEventListener("change", drawBookSummary));
+  drawBookSummary();
+
+  $("#book-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const d = DUNGEONS.find((x) => x.id === $("#bk-dungeon").value);
+    const ref = "DKS-" + Math.random().toString(36).slice(2, 8).toUpperCase();
+    const booking = { ref, dungeon: d.id, date: $("#bk-date").value, time: $("#bk-time").value, hours: +$("#bk-hours").value, name: $("#bk-name").value };
+    const all = JSON.parse(localStorage.getItem("dk_bookings") || "[]");
+    all.push(booking);
+    localStorage.setItem("dk_bookings", JSON.stringify(all));
+    $("#panel-book").innerHTML = `
+      <div class="confirm-box">
+        <p class="big">🏰</p>
+        <h1>Session ${ref} reserved</h1>
+        <p style="color:var(--muted);max-width:520px;margin:14px auto 6px">${d.name} · ${booking.date} at ${booking.time} for ${booking.hours} hours. A confirmation with directions and house rules is on its way to <b>${$("#bk-email")?.value || "you"}</b>.</p>
+        <p class="demo-note" style="max-width:480px;margin:18px auto">Demo build — no real reservation was made and no deposit was charged.</p>
+        <a class="btn btn-red" style="width:auto;margin-top:10px" href="dungeon.html">Back to Dungeons</a>
+      </div>`;
+  });
+
+  /* ---------- build request ---------- */
+  $("#bd-space").innerHTML = BUILD_SPACES.map((s) => `<option>${s}</option>`).join("");
+  $("#bd-budget").innerHTML = BUILD_BUDGETS.map((b) => `<option>${b}</option>`).join("");
+  $("#bd-features").innerHTML = BUILD_FEATURES.map((f) => `<label class="check"><input type="checkbox" value="${f}"> ${f}</label>`).join("");
+
+  $("#build-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const ref = "DKB-" + Math.random().toString(36).slice(2, 8).toUpperCase();
+    const picked = $$("#bd-features input:checked").map((c) => c.value);
+    const req = { ref, city: $("#bd-city").value, space: $("#bd-space").value, budget: $("#bd-budget").value, features: picked, name: $("#bd-name").value };
+    const all = JSON.parse(localStorage.getItem("dk_builds") || "[]");
+    all.push(req);
+    localStorage.setItem("dk_builds", JSON.stringify(all));
+    $("#panel-build").innerHTML = `
+      <div class="confirm-box">
+        <p class="big">🛠️</p>
+        <h1>Request ${ref} received</h1>
+        <p style="color:var(--muted);max-width:520px;margin:14px auto 6px">Thanks ${req.name.split(" ")[0]} — we'll reach out within two business days to schedule your free consultation for a ${req.space.toLowerCase()} build in ${req.city}${picked.length ? `, featuring ${picked.slice(0, 3).join(", ").toLowerCase()}${picked.length > 3 ? " and more" : ""}` : ""}.</p>
+        <p class="demo-note" style="max-width:480px;margin:18px auto">Demo build — the request was saved locally only.</p>
+        <a class="btn btn-red" style="width:auto;margin-top:10px" href="dungeon.html#build">Back to Dungeons</a>
+      </div>`;
+  });
+});
+</script>
+</body>
+</html>

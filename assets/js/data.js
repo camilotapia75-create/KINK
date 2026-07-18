@@ -64,9 +64,31 @@ const NAV = [
     { slug: "beads", name: "Beads" },
   ]},
   { slug: "best-sellers", name: "Best Sellers", subs: [] },
+  { slug: "dungeons", name: "Dungeons", href: "dungeon.html", subs: [] },
   { slug: "advice", name: "Advice", page: true, subs: [] },
   { slug: "events", name: "Events", page: true, subs: [] },
 ];
+
+/* Bookable dungeon locations (dungeon.html). Rates are per hour. */
+const DUNGEONS = [
+  { id: "crimson-keep", name: "The Crimson Keep", city: "Los Angeles, CA", rate: 120, hue: 355, icon: "stocks",
+    blurb: "Our 1,200 sq ft flagship playspace. Suspension rig, St. Andrew's cross, full impact wall, and a proper aftercare lounge.",
+    features: ["Suspension rig", "St. Andrew's cross", "Impact wall", "Aftercare lounge"] },
+  { id: "iron-cellar", name: "The Iron Cellar", city: "Brooklyn, NY", rate: 95, hue: 220, icon: "collar",
+    blurb: "Industrial basement dungeon: steel cage, bondage bed, medical corner, and acoustics that keep everything inside.",
+    features: ["Steel cage", "Bondage bed", "Medical corner", "Private shower"] },
+  { id: "velvet-vault", name: "The Velvet Vault", city: "Austin, TX", rate: 80, hue: 300, icon: "blindfold",
+    blurb: "An intimate boutique space built for couples and first-timers. Optional session monitor on call.",
+    features: ["Padded floor", "Throne", "Ceiling rope points", "Monitor on call"] },
+];
+const SESSION_DURATIONS = [2, 3, 4, 8];
+const BUILD_FEATURES = [
+  "St. Andrew's cross", "Suspension rig / hard points", "Steel cage", "Bondage bed",
+  "Impact wall rack", "Throne", "Medical station", "Soundproofing",
+  "Hidden / convertible design", "Climate control",
+];
+const BUILD_BUDGETS = ["Under $5,000", "$5,000 – $15,000", "$15,000 – $40,000", "$40,000+"];
+const BUILD_SPACES = ["Basement", "Garage", "Spare room", "Dedicated new build", "Commercial space"];
 
 /* Product images are generated placeholders (see app.js imgFor). `hue`
    tints the placeholder; `icon` picks the silhouette. Replace with real

@@ -124,7 +124,7 @@ function renderChrome() {
       </div>
       <nav class="mainnav" aria-label="Main">
         ${NAV.map((c) => {
-          const href = c.page ? `info.html?page=${c.slug}` : `category.html?c=${c.slug}`;
+          const href = c.href || (c.page ? `info.html?page=${c.slug}` : `category.html?c=${c.slug}`);
           const drop = c.subs.length
             ? `<div class="drop">${c.subs.map((s) => `<a href="category.html?c=${c.slug}&sub=${s.slug}">${s.name}</a>`).join("")}</div>`
             : "";
@@ -141,6 +141,8 @@ function renderChrome() {
       <div class="foot-grid">
         <div>
           <h4>Community</h4>
+          <a href="dungeon.html">Book a Dungeon</a>
+          <a href="dungeon.html#build">Dungeon Builds</a>
           <a href="info.html?page=events">${STORE.name} Events</a>
           <a href="info.html?page=about">About Us</a>
           <a href="info.html?page=jobs">Jobs</a>
