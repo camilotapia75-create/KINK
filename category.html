@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shop — DungeonKing</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%23c1272d'/%3E%3Ctext x='50' y='68' font-size='50' font-weight='bold' text-anchor='middle' fill='white' font-family='sans-serif'%3EDK%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main class="wrap">
+  <p class="crumbs" id="crumbs"></p>
+  <h1 class="page-title" id="title"></h1>
+  <div class="toolbar">
+    <button class="view-btn active" id="view-grid" aria-label="Grid view">▦</button>
+    <button class="view-btn" id="view-list" aria-label="List view">☰</button>
+    <span style="color:var(--line)">|</span>
+    <label>Sort:
+      <select id="sort">
+        <option value="featured">Featured</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="name">Name A–Z</option>
+        <option value="rating">Top Rated</option>
+      </select>
+    </label>
+  </div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer id="site-footer"></footer>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const params = new URLSearchParams(location.search);
+  const c = params.get("c"), sub = params.get("sub"), q = params.get("q");
+  const cat = NAV.find((n) => n.slug === c);
+  const subName = cat?.subs.find((s) => s.slug === sub)?.name;
+
+  let title, crumbs;
+  if (q) {
+    title = `Search: “${q}”`;
+    crumbs = `<a href="index.html">Home</a> › Search`;
+  } else {
+    title = subName || cat?.name || "All Products";
+    if (c === "sex-toys" && !sub) title = "Fetish Sex Toys";
+    crumbs = `<a href="index.html">Home</a> › ` +
+      (cat ? `<a href="category.html?c=${c}">${cat.name}</a>` : "All") +
+      (subName ? ` › ${subName}` : "");
+  }
+  document.title = `${title} — ${STORE.name}`;
+  $("#title").textContent = title;
+  $("#crumbs").innerHTML = crumbs;
+
+  let list = productsForCollection(c, sub, q);
+  let mode = "grid";
+
+  const sorters = {
+    featured: (a, b) => (b.featured === true) - (a.featured === true) || (b.best === true) - (a.best === true),
+    "price-asc": (a, b) => a.price - b.price,
+    "price-desc": (a, b) => b.price - a.price,
+    name: (a, b) => a.name.localeCompare(b.name),
+    rating: (a, b) => b.rating - a.rating,
+  };
+
+  function draw() {
+    const sorted = [...list].sort(sorters[$("#sort").value]);
+    const grid = $("#grid");
+    grid.classList.toggle("listing", mode === "list");
+    grid.innerHTML = sorted.length
+      ? sorted.map((p) => productCard(p, mode === "list")).join("")
+      : `<p class="empty-note">Nothing here yet — try <a href="category.html?c=best-sellers" style="color:var(--red)">Best Sellers</a>.</p>`;
+  }
+  $("#sort").addEventListener("change", draw);
+  $("#view-grid").addEventListener("click", () => { mode = "grid"; $("#view-grid").classList.add("active"); $("#view-list").classList.remove("active"); draw(); });
+  $("#view-list").addEventListener("click", () => { mode = "list"; $("#view-list").classList.add("active"); $("#view-grid").classList.remove("active"); draw(); });
+  draw();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your Cart — DungeonKing</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%23c1272d'/%3E%3Ctext x='50' y='68' font-size='50' font-weight='bold' text-anchor='middle' fill='white' font-family='sans-serif'%3EDK%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main class="wrap">
+  <p class="crumbs"><a href="index.html">Home</a> › Cart</p>
+  <h1 class="page-title">Your Cart</h1>
+  <div class="two-col" id="cart-page"></div>
+</main>
+
+<footer id="site-footer"></footer>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+function drawCartPage() {
+  const items = Cart.read();
+  const sub = Cart.subtotal();
+  const remaining = STORE.freeShipThreshold - sub;
+  $("#cart-page").innerHTML = items.length === 0
+    ? `<p class="empty-note" style="grid-column:1/-1">Your cart is empty. <a href="category.html?c=best-sellers" style="color:var(--red)">Browse best sellers ›</a></p>`
+    : `<div>
+        <table class="cart-table">
+          <tr><th></th><th>Product</th><th>Price</th><th>Qty</th><th>Total</th><th></th></tr>
+          ${items.map((l) => { const p = byId(l.id); return `<tr>
+            <td><a href="product.html?p=${p.id}"><img src="${imgFor(p)}" alt=""></a></td>
+            <td><a href="product.html?p=${p.id}"><b>${p.name}</b></a></td>
+            <td>${onSale(p) ? `<s style="color:#ff5252">${money(p.compareAt)}</s> ` : ""}${money(p.price)}</td>
+            <td><span class="qty"><button onclick="Cart.setQty('${p.id}',${l.qty-1});drawCartPage()">−</button><b>${l.qty}</b><button onclick="Cart.setQty('${p.id}',${l.qty+1});drawCartPage()">+</button></span></td>
+            <td><b>${money(p.price * l.qty)}</b></td>
+            <td><button class="link-btn" onclick="Cart.remove('${p.id}');drawCartPage()">🗑</button></td>
+          </tr>`; }).join("")}
+        </table>
+        <div class="ship-bar">${remaining > 0 ? `Spend <b>${money(remaining)}</b> more to get <b>Free Shipping</b>` : "🎉 You've unlocked <b>Free Shipping</b>"}</div>
+      </div>
+      <div class="summary-card">
+        <p><span>Total products (${Cart.count()})</span><span>${money(sub)}</span></p>
+        <p><span>Shipping</span><span>${remaining > 0 ? "Calculated at checkout" : "FREE"}</span></p>
+        <p class="tot"><span>Total excl. Tax</span><span>${money(sub)}</span></p>
+        <a class="btn btn-gold" href="checkout.html" style="margin-top:14px">Checkout</a>
+        <div class="assure">🔒<br>${STORE.returnDays} Day King's Return Policy<br>Always Discreet Shipping</div>
+      </div>`;
+}
+document.addEventListener("DOMContentLoaded", drawCartPage);
+</script>
+</body>
+</html>

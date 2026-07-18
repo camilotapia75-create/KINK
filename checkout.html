@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Checkout — DungeonKing</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%23c1272d'/%3E%3Ctext x='50' y='68' font-size='50' font-weight='bold' text-anchor='middle' fill='white' font-family='sans-serif'%3EDK%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+<div id="checkout-root" class="checkout">
+  <div class="co-left">
+    <p class="express">Express checkout</p>
+    <div class="express-btns">
+      <button class="x-paypal" onclick="toast('Express checkout is disabled in this demo build.')">PayPal</button>
+      <button class="x-gpay" onclick="toast('Express checkout is disabled in this demo build.')">G Pay</button>
+      <button class="x-venmo" onclick="toast('Express checkout is disabled in this demo build.')">venmo</button>
+    </div>
+    <p class="or">OR</p>
+
+    <form id="co-form">
+      <h2 style="display:flex;justify-content:space-between;align-items:baseline">Contact <a href="#" style="color:var(--red);font-size:.9rem;text-decoration:underline" onclick="toast('Accounts are disabled in this demo build.');return false">Sign in</a></h2>
+      <div class="field"><input type="email" id="co-email" placeholder="Email" required></div>
+      <label class="check"><input type="checkbox" checked> Email me with news and offers</label>
+
+      <h2>Delivery</h2>
+      <div class="field"><select><option>United States</option><option>Canada</option><option>United Kingdom</option><option>Germany</option><option>Australia</option></select></div>
+      <div class="field field-row">
+        <input placeholder="First name" required><input placeholder="Last name" required>
+      </div>
+      <div class="field"><input placeholder="Address" required></div>
+      <div class="field"><input placeholder="Apartment, suite, etc. (optional)"></div>
+      <div class="field field-row field-row-3">
+        <input placeholder="City" required>
+        <select><option>California</option><option>New York</option><option>Texas</option><option>Florida</option><option>Washington</option><option>Other…</option></select>
+        <input placeholder="ZIP code" required>
+      </div>
+      <div class="field"><input type="tel" placeholder="Phone (optional)"></div>
+      <label class="check"><input type="checkbox"> Save this information for next time</label>
+
+      <h2>Shipping method</h2>
+      <div class="ship-options" id="ship-options"></div>
+      <p style="color:var(--muted);font-size:.9rem;margin:6px 0 22px">Orders placed after 1pm Monday–Friday, or on Saturday/Sunday/holidays, will ship on the next business day.</p>
+
+      <h2>Payment</h2>
+      <p class="demo-note">⚠ Demo build — no payment is collected and no real order is placed. Wire Stripe / Shopify Checkout here for production.</p>
+      <div class="field"><input placeholder="Card number" inputmode="numeric" maxlength="19" required></div>
+      <div class="field field-row"><input placeholder="MM / YY" required><input placeholder="CVC" inputmode="numeric" maxlength="4" required></div>
+
+      <button class="btn btn-gold" type="submit" style="margin-top:10px">Place order</button>
+    </form>
+  </div>
+
+  <div class="co-right">
+    <a class="logo" href="index.html" style="margin-bottom:34px"><span class="logo-mark">DK</span><span class="logo-text">DUNGEON<br>KING</span></a>
+    <div id="co-lines"></div>
+    <div class="discount-row">
+      <input class="field-input" id="co-code" placeholder="Discount code or gift card" style="background:#222;color:#fff;border:1px solid var(--line);border-radius:6px;padding:12px 16px">
+      <button class="btn" id="co-apply" type="button">Apply</button>
+    </div>
+    <div class="co-totals" id="co-totals"></div>
+  </div>
+</div>
+
+<div class="toastless"></div>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+/* checkout has its own minimal chrome — hide the site header/footer bits app.js expects */
+let discountPct = 0, shipId = STORE.shippingMethods[0].id;
+
+function totals() {
+  const sub = Cart.subtotal();
+  const discount = sub * discountPct / 100;
+  const method = STORE.shippingMethods.find((m) => m.id === shipId);
+  const freeShip = method.freeOverThreshold && sub - discount >= STORE.freeShipThreshold;
+  const ship = Cart.count() === 0 ? 0 : freeShip ? 0 : method.price;
+  return { sub, discount, ship, grand: sub - discount + ship, freeShip };
+}
+
+function drawSummary() {
+  const items = Cart.read();
+  $("#co-lines").innerHTML = items.length === 0
+    ? `<p style="color:var(--muted);margin-bottom:20px">Your cart is empty — <a href="index.html" style="color:var(--red)">back to the store</a>.</p>`
+    : items.map((l) => { const p = byId(l.id); return `<div class="co-line">
+        <span class="badge" style="position:relative"><img src="${imgFor(p)}" width="64" alt=""><span class="co-qty">${l.qty}</span></span>
+        <span>${p.name}</span><b>${money(p.price * l.qty)}</b>
+      </div>`; }).join("");
+
+  const t = totals();
+  $("#co-totals").innerHTML = `
+    <p><span>Subtotal · ${Cart.count()} item${Cart.count() === 1 ? "" : "s"}</span><span>${money(t.sub)}</span></p>
+    ${t.discount ? `<p><span>Discount (${discountPct}%)</span><span>−${money(t.discount)}</span></p>` : ""}
+    <p><span>Shipping</span><span>${t.freeShip ? "FREE" : money(t.ship)}</span></p>
+    <p class="grand"><span>Total</span><span><small>USD</small>${money(t.grand)}</span></p>`;
+
+  $("#ship-options").innerHTML = STORE.shippingMethods.map((m) => {
+    const free = m.freeOverThreshold && t.sub >= STORE.freeShipThreshold;
+    return `<label><span><input type="radio" name="ship" value="${m.id}" ${m.id === shipId ? "checked" : ""}> ${m.name}</span><b>${free ? "FREE" : money(m.price)}</b></label>`;
+  }).join("");
+  $$('input[name="ship"]').forEach((r) => r.addEventListener("change", () => { shipId = r.value; drawSummary(); }));
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  drawSummary();
+  $("#co-apply").addEventListener("click", () => {
+    const code = $("#co-code").value.trim().toUpperCase();
+    if (STORE.coupons[code]) { discountPct = STORE.coupons[code]; toast(`Code ${code} applied — ${discountPct}% off.`); }
+    else { discountPct = 0; toast("That code isn't valid."); }
+    drawSummary();
+  });
+  $("#co-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (Cart.count() === 0) { toast("Your cart is empty."); return; }
+    const t = totals();
+    const order = "DK-" + Math.random().toString(36).slice(2, 8).toUpperCase();
+    Cart.clear();
+    document.getElementById("checkout-root").innerHTML = `
+      <div class="confirm-box" style="grid-column:1/-1">
+        <p class="big">👑</p>
+        <h1>Order ${order} confirmed</h1>
+        <p style="color:var(--muted);max-width:480px;margin:14px auto 6px">Thanks for shopping with ${STORE.name}. A confirmation email is on its way to <b>${$("#co-email")?.value || "you"}</b>. Total charged: <b>${money(t.grand)}</b>.</p>
+        <p class="demo-note" style="max-width:480px;margin:18px auto">Demo build — no payment was actually processed.</p>
+        <a class="btn btn-red" style="width:auto;margin-top:10px" href="index.html">Back to the dungeon</a>
+      </div>`;
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Product — DungeonKing</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%23c1272d'/%3E%3Ctext x='50' y='68' font-size='50' font-weight='bold' text-anchor='middle' fill='white' font-family='sans-serif'%3EDK%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+<header id="site-header"></header>
+
+<main class="wrap">
+  <p class="crumbs" id="crumbs"></p>
+  <div class="pdp" id="pdp"></div>
+  <section class="reviews" id="reviews"></section>
+</main>
+
+<footer id="site-footer"></footer>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+let product, qty = 1;
+
+function setImage(i) {
+  $("#main-img").src = imgFor(product, i);
+  $$(".thumbs img").forEach((t, j) => t.classList.toggle("active", i === j));
+}
+function bumpQty(d) {
+  qty = Math.max(1, qty + d);
+  $("#qty-num").textContent = qty;
+}
+
+function drawReviews() {
+  const revs = reviewsFor(product);
+  const avg = revs.reduce((n, r) => n + r.stars, 0) / revs.length;
+  const dist = [5, 4, 3, 2, 1].map((s) => ({
+    s, pct: Math.round((revs.filter((r) => r.stars === s).length / revs.length) * 100),
+  }));
+  $("#reviews").innerHTML = `
+    <h2>Customer reviews</h2>
+    <div class="rev-summary">
+      <div class="rev-score">
+        <span class="big">${(Math.round(avg * 10) / 10)}</span><span class="of"> /5</span>
+        <div>${stars(avg)}</div>
+        <small style="color:var(--muted)">${revs.length} reviews</small>
+      </div>
+      <div class="rev-bars">
+        ${dist.map((d) => `<p><span>${d.s}★</span><span class="bar"><i style="width:${d.pct}%"></i></span><span>${d.pct}%</span></p>`).join("")}
+      </div>
+    </div>
+    <div class="rev-tabs">
+      <b>Reviews <small>${revs.length}</small></b>
+      <span style="color:var(--muted)">Questions <small>0</small></span>
+      <span class="spacer"></span>
+      <button class="link-btn" onclick="toast('Questions are disabled in this demo build.')">Ask a question</button>
+      <button class="link-btn" onclick="document.getElementById('rev-form').hidden = false; this.disabled = true">Write a review</button>
+    </div>
+    ${revs.map((r) => `<div class="review">
+      ${stars(r.stars)}
+      <p class="who">${r.name} <span class="vb">✔</span> Verified buyer</p>
+      <p>${r.text}</p>
+    </div>`).join("")}
+    <form class="rev-form" id="rev-form" hidden>
+      <h3>Write a review</h3>
+      <input id="rf-name" placeholder="Your name" required>
+      <select id="rf-stars">${[5,4,3,2,1].map((s) => `<option value="${s}">${"★".repeat(s)} (${s})</option>`).join("")}</select>
+      <textarea id="rf-text" rows="3" placeholder="Your review" required></textarea>
+      <button class="btn btn-red small" type="submit">Submit review</button>
+    </form>`;
+  $("#rev-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const key = "dk_reviews_" + product.id;
+    const local = JSON.parse(localStorage.getItem(key) || "[]");
+    local.unshift({ stars: +$("#rf-stars").value, name: $("#rf-name").value, text: $("#rf-text").value });
+    localStorage.setItem(key, JSON.stringify(local));
+    toast("Thanks — your review is live.");
+    drawReviews();
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const id = new URLSearchParams(location.search).get("p");
+  product = byId(id) || PRODUCTS[0];
+  const p = product;
+  document.title = `${p.name} — ${STORE.name}`;
+
+  const cat = NAV.find((n) => n.slug === p.category);
+  const subName = cat?.subs.find((s) => s.slug === p.sub)?.name || "";
+  $("#crumbs").innerHTML = `<a href="index.html">Home</a> › ${onSale(p) ? `<a href="category.html?c=sale">SALE</a> › ` : ""}<a href="category.html?c=${p.category}">${cat?.name || ""}</a> › <a href="category.html?c=${p.category}&sub=${p.sub}">${subName}</a>`;
+
+  const oos = !inStock(p);
+  const shortDesc = p.desc.length > 130 ? p.desc.slice(0, 130) + "…" : p.desc;
+  $("#pdp").innerHTML = `
+    <div>
+      <h1 class="pdp-title">${p.name}</h1>
+      <div class="pdp-rating">${stars(p.rating)} <span>${reviewCount(p)} reviews</span></div>
+      <div class="gallery">
+        <div class="thumbs">${[0,1,2,3].map((i) => `<img src="${imgFor(p, i)}" alt="" class="${i===0?'active':''}" onclick="setImage(${i})">`).join("")}</div>
+        <div class="main">
+          ${onSale(p) ? `<span class="sale-flag">Sale -${salePct(p)}%</span>` : ""}
+          <img id="main-img" src="${imgFor(p, 0)}" alt="${p.name}">
+        </div>
+      </div>
+    </div>
+    <div>
+      ${onSale(p) ? `<p class="promo-line">${STORE.promoLine}</p>` : ""}
+      <p class="pdp-desc"><span id="desc-short">${shortDesc} </span>${p.desc.length > 130 ? `<span class="more" onclick="$('#desc-short').textContent = product.desc; this.remove()">Read more</span>` : ""}</p>
+      <p class="pdp-price">${onSale(p) ? `<s>${money(p.compareAt)}</s>` : ""}<b>${money(p.price)}</b></p>
+      ${oos ? `<p class="oos" style="font-size:1.1rem;margin-bottom:14px">Out of stock</p><button class="btn btn-ghost" onclick="toast('We\\'ll email you when it\\'s back. (Demo)')">Notify me when available</button>`
+      : `<div class="buy-row">
+          <span class="qty"><button onclick="bumpQty(-1)">−</button><b id="qty-num">1</b><button onclick="bumpQty(1)">+</button></span>
+          <button class="btn btn-red" onclick="Cart.add(product.id, qty)">Add to cart</button>
+        </div>`}
+      ${p.stock !== undefined && p.stock > 0 && p.stock <= 5 ? `<p class="oos" style="margin-top:12px">${p.stock} in stock — almost gone</p>` : ""}
+      <div class="pdp-assure">
+        <span><i>↩️</i>${STORE.returnDays} Day Returns</span>
+        <span><i>📦</i>Discreet Package</span>
+      </div>
+      <div class="pdp-rating">${stars(p.rating)} <span>${reviewCount(p)} reviews</span></div>
+    </div>`;
+  drawReviews();
+});
+</script>
+</body>
+</html>
