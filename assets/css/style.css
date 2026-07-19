@@ -442,69 +442,6 @@ footer { background: var(--black); margin-top: 70px; padding: 60px 0 30px; }
 .info-body p, .info-body blockquote { color: #ddd; margin-bottom: 12px; }
 .info-body blockquote { border-left: 3px solid var(--red); padding-left: 16px; font-style: italic; }
 
-/* ---------- cinematic hero content ---------- */
-.hero-kicker {
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  color: #fff; font-weight: 300; letter-spacing: .3em; font-size: .85rem;
-  text-transform: uppercase; margin-bottom: 30px;
-}
-.hero-kicker .crown { color: var(--red); font-size: 1.1rem; }
-.hero-serif {
-  font-family: "EB Garamond", "Garamond", "Times New Roman", serif;
-  font-weight: 400; font-size: clamp(2.7rem, 8.5vw, 7.2rem);
-  line-height: 1.08; letter-spacing: -.01em; color: #fff; margin-bottom: 28px;
-  text-transform: uppercase;
-}
-.hero-serif .ch { display: inline-block; white-space: pre; }
-.hero-sub2 {
-  color: rgba(255,255,255,.7); font-weight: 300; line-height: 1.65;
-  max-width: 36rem; margin: 0 auto 36px; font-size: clamp(.95rem, 1.4vw, 1.15rem);
-}
-.hero-cta-wrap { display: flex; justify-content: center; }
-.hero-cta {
-  width: auto; padding: 15px 44px; color: rgba(255,255,255,.9);
-  text-transform: uppercase; letter-spacing: .2em; font-size: .85rem; font-weight: 400;
-}
-@media (max-width: 640px) { .hide-sm { display: none; } }
-@media (prefers-reduced-motion: no-preference) {
-  .hero-serif .ch { opacity: 0; animation: chIn .55s ease forwards; }
-  @keyframes chIn { to { opacity: 1; } }
-  .hero-sub2, .hero-cta-wrap { opacity: 0; animation: fadeUp .8s ease forwards; }
-  .hero-sub2 { animation-delay: 1.6s; }
-  .hero-cta-wrap { animation-delay: 2s; }
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
-}
-
-/* liquid glass (ported from the React hero experiment) */
-.liquid-glass {
-  background: rgba(255, 255, 255, 0.01);
-  background-blend-mode: luminosity;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  border: none;
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
-  position: relative;
-  overflow: hidden;
-}
-.liquid-glass::before {
-  content: "";
-  position: absolute; inset: 0; border-radius: inherit; padding: 1.4px;
-  background: linear-gradient(180deg,
-    rgba(255,255,255,.45) 0%, rgba(255,255,255,.15) 20%,
-    rgba(255,255,255,0) 40%, rgba(255,255,255,0) 60%,
-    rgba(255,255,255,.15) 80%, rgba(255,255,255,.45) 100%);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-}
-.liquid-glass:hover {
-  background: rgba(255, 255, 255, 0.04);
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.15);
-  filter: none;
-}
-.liquid-glass:active { transform: scale(0.98); }
-
 /* ---------- scroll story (pinned cinematic chapters) ---------- */
 .story { height: 340vh; position: relative; }
 .story-sticky {
