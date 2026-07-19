@@ -30,20 +30,6 @@
   document.addEventListener("DOMContentLoaded", () => setTimeout(init, 0));
 
   function init() {
-    /* ---------- kinetic headlines ---------- */
-    document.querySelectorAll(".hero-content h1, .svc-banner h1, .section-head h2, .page-title").forEach((h) => {
-      if (h.children.length || !h.textContent.trim()) return;   // plain text only
-      const text = h.textContent;
-      h.textContent = "";
-      h.classList.add("split");
-      [...text].forEach((ch, i) => {
-        const s = document.createElement("span");
-        s.textContent = ch === " " ? " " : ch;
-        s.style.transitionDelay = s.style.animationDelay = `${i * 22}ms`;
-        h.appendChild(s);
-      });
-    });
-
     /* ---------- scroll reveals ---------- */
     const revealSel = [
       ".card", ".cat-card", ".svc-card", ".section-head", ".build-steps > div",
@@ -62,24 +48,24 @@
       el.style.transitionDelay = `${(i % 4) * 70}ms`;
       io.observe(el);
     });
-    /* headlines reveal through the same observer */
-    document.querySelectorAll(".split").forEach((el) => io.observe(el));
-
-    /* ---------- 3D tilt on product cards ---------- */
-    document.querySelectorAll(".card .card-img, .svc-card img, .gallery .main").forEach((img) => {
-      const host = img.closest(".card, .svc-card") || img;
+    /* ---------- 3D tilt on product & category cards ---------- */
+    document.querySelectorAll(".card .card-img, .cat-card img, .svc-card img, .gallery .main").forEach((img) => {
+      const host = img.closest(".card, .cat-card, .svc-card") || img;
       host.addEventListener("mousemove", (e) => {
         const r = img.getBoundingClientRect();
         const px = (e.clientX - r.left) / r.width - 0.5;
         const py = (e.clientY - r.top) / r.height - 0.5;
         img.style.transform = `perspective(700px) rotateY(${px * 10}deg) rotateX(${-py * 8}deg) scale(1.025)`;
-        img.style.setProperty("--gx", `${(px + 0.5) * 100}%`);
-        img.style.setProperty("--gy", `${(py + 0.5) * 100}%`);
-        img.classList.add("tilting");
+        for (const el of [img, host]) {
+          el.style.setProperty("--gx", `${(px + 0.5) * 100}%`);
+          el.style.setProperty("--gy", `${(py + 0.5) * 100}%`);
+          el.classList.add("tilting");
+        }
       });
       host.addEventListener("mouseleave", () => {
         img.style.transform = "";
         img.classList.remove("tilting");
+        host.classList.remove("tilting");
       });
     });
 
