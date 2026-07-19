@@ -170,11 +170,11 @@
       video: () => videoEl,
       setScroll(scale, y) { extraScale = scale; extraY = y; },
       stir(amount) {
-        for (let k = 0; k < 3; k++) {
+        for (let k = 0; k < 4; k++) {
           const gx = 4 + Math.random() * (GN - 8);
           const gy = GM * (0.25 + Math.random() * 0.65);
-          splat(gx, gy, (Math.random() - 0.5) * amount * 2.4, -Math.abs(amount) * (0.5 + Math.random()),
-            Math.min(0.5, Math.abs(amount) * 0.06), 4);
+          splat(gx, gy, (Math.random() - 0.5) * amount * 3, -Math.abs(amount) * (0.6 + Math.random()),
+            Math.min(0.9, Math.abs(amount) * 0.11), 5);
         }
       },
     };
