@@ -63,7 +63,7 @@
         p[IX(i, j)] = 0;
       }
       setBnd(0, div); setBnd(0, p);
-      for (let k = 0; k < 14; k++) {
+      for (let k = 0; k < 11; k++) {
         for (let j = 1; j <= GM; j++) for (let i = 1; i <= GN; i++) {
           p[IX(i, j)] = (div[IX(i, j)] + p[IX(i - 1, j)] + p[IX(i + 1, j)] + p[IX(i, j - 1)] + p[IX(i, j + 1)]) / 4;
         }
@@ -116,6 +116,9 @@
     const bctx = buf.getContext("2d");
     const img = bctx.createImageData(GN, GM);
     const pix = img.data;
+    const mid = document.createElement("canvas");
+    mid.width = GN * 4; mid.height = GM * 4;
+    const mctx = mid.getContext("2d");
     function drawDye() {
       for (let j = 1; j <= GM; j++) for (let i = 1; i <= GN; i++) {
         const d = dye[IX(i, j)];
@@ -127,10 +130,17 @@
         pix[k + 3] = 235 * Math.min(1, d * 1.1);
       }
       bctx.putImageData(img, 0, 0);
+      /* two-stage upscale: blur at 4x grid size (cheap), then bilinear up to
+         full canvas — hides the sim grid so the dye reads as soft smoke */
+      mctx.clearRect(0, 0, mid.width, mid.height);
+      mctx.imageSmoothingEnabled = true;
+      mctx.filter = "blur(2.5px)";
+      mctx.drawImage(buf, 0, 0, mid.width, mid.height);
+      mctx.filter = "none";
       ctx.save();
       ctx.globalCompositeOperation = "screen";
       ctx.imageSmoothingEnabled = true;
-      ctx.drawImage(buf, 0, 0, W, H);
+      ctx.drawImage(mid, 0, 0, W, H);
       ctx.restore();
     }
 
@@ -151,6 +161,24 @@
       x: Math.random(), y: Math.random(), s: 0.6 + Math.random() * 1.7,
       vy: 0.0004 + Math.random() * 0.001, drift: Math.random() * 6.28, ox: 0, ovx: 0,
     }));
+
+    /* external scroll hooks: extra zoom/pan applied to the video layer, and
+       stir() injects turbulence into the fluid (used by the scroll story) */
+    let extraScale = 0, extraY = 0;
+    const api = {
+      container,
+      video: () => videoEl,
+      setScroll(scale, y) { extraScale = scale; extraY = y; },
+      stir(amount) {
+        for (let k = 0; k < 3; k++) {
+          const gx = 4 + Math.random() * (GN - 8);
+          const gy = GM * (0.25 + Math.random() * 0.65);
+          splat(gx, gy, (Math.random() - 0.5) * amount * 2.4, -Math.abs(amount) * (0.5 + Math.random()),
+            Math.min(0.5, Math.abs(amount) * 0.06), 4);
+        }
+      },
+    };
+    container.__dkfx = api;
 
     const content = opts.content ? container.querySelector(opts.content) : null;
     let t = 0, running = true;
@@ -204,9 +232,10 @@
       ctx.fillRect(0, 0, W, H);
 
       if (content) content.style.transform = `translate(${-cx * 22}px, ${-cy * 14}px)`;
-      if (videoEl) videoEl.style.transform = `scale(1.04) translate(${-cx * 10}px, ${-cy * 7}px)`;
+      if (videoEl) videoEl.style.transform = `scale(${1.04 + extraScale}) translate(${-cx * 10}px, ${-cy * 7 + extraY}px)`;
     }
     frame();
+    return api;
   }
 
   window.DKFX = { mount };
