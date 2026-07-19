@@ -6,7 +6,7 @@
 <title>DungeonKing — Dungeon-Grade BDSM Gear</title>
 <meta name="description" content="Professional BDSM gear from DungeonKing. Free US shipping over $119, always discreet packages, 101-day returns.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=EB+Garamond:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%23c1272d'/%3E%3Ctext x='50' y='68' font-size='50' font-weight='bold' text-anchor='middle' fill='white' font-family='sans-serif'%3EDK%3C/text%3E%3C/svg%3E">
 </head>
@@ -16,10 +16,10 @@
 <main>
   <section class="hero wrap" id="hero">
     <div class="hero-content">
-      <span class="logo-mark">DK</span>
-      <h1>Rule Your Dungeon</h1>
-      <span class="sub">DUNGEON-GRADE GEAR FROM <b>DUNGEONKING</b></span>
-      <div><a class="btn" href="category.html?c=best-sellers">SHOP NOW</a></div>
+      <p class="hero-kicker"><span class="crown">♛</span> DUNGEONKING</p>
+      <h1 class="hero-serif" id="hero-title"><span class="line">ENTER THE</span><br><span class="line">KING'S DUNGEON</span></h1>
+      <p class="hero-sub2">Dungeon-grade gear, private playspaces, custom builds —<br class="hide-sm"> crafted for those born to rule.</p>
+      <div class="hero-cta-wrap"><a class="btn liquid-glass hero-cta" href="category.html?c=best-sellers">Enter the Dungeon</a></div>
     </div>
   </section>
 
@@ -61,6 +61,21 @@
 <script src="assets/js/motion.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
+  /* split hero headline into characters for the staggered cascade */
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    $$("#hero-title .line").forEach((line) => {
+      const text = line.textContent;
+      line.textContent = "";
+      [...text].forEach((ch, i) => {
+        const s = document.createElement("span");
+        s.className = "ch";
+        s.textContent = ch;
+        s.style.animationDelay = `${i * 0.07}s`;
+        line.appendChild(s);
+      });
+    });
+  }
+
   const cats = NAV.filter((c) => c.blurb).slice(0, 6);
   $("#cat-grid").innerHTML = cats.map((c) => {
     const sample = PRODUCTS.find((p) => p.category === c.slug && p.featured) || PRODUCTS.find((p) => p.category === c.slug);
