@@ -24,6 +24,10 @@
       container.prepend(videoEl);
     }
 
+    const grade = document.createElement("div");
+    grade.className = "fx-grade";
+    canvas.after(grade);
+
     let W = 0, H = 0, dpr = 1;
     function resize() {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
