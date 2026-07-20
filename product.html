@@ -26,6 +26,16 @@
 let product, qty = 1;
 
 function setImage(i) {
+  const frame3d = $("#main-3d");
+  if (frame3d) {
+    /* thumb 0 is the interactive 3D view; photos follow */
+    const show3d = i === 0;
+    frame3d.hidden = !show3d;
+    $("#main-img").hidden = show3d;
+    if (!show3d) $("#main-img").src = imgFor(product, i - 1);
+    $$(".thumbs .thumb").forEach((t, j) => t.classList.toggle("active", i === j));
+    return;
+  }
   $("#main-img").src = imgFor(product, i);
   $$(".thumbs img").forEach((t, j) => t.classList.toggle("active", i === j));
 }
@@ -99,11 +109,21 @@ document.addEventListener("DOMContentLoaded", () => {
       <h1 class="pdp-title">${p.name}</h1>
       <div class="pdp-rating">${stars(p.rating)} <span>${reviewCount(p)} reviews</span></div>
       <div class="gallery">
+        ${p.viewer3d ? `
+        <div class="thumbs">
+          <button class="thumb thumb-3d active" onclick="setImage(0)" aria-label="Interactive 3D view">360°</button>
+          ${[0,1,2].map((i) => `<img src="${imgFor(p, i)}" alt="" class="thumb" onclick="setImage(${i + 1})">`).join("")}
+        </div>
+        <div class="main">
+          ${onSale(p) ? `<span class="sale-flag">Sale -${salePct(p)}%</span>` : ""}
+          <iframe id="main-3d" src="${p.viewer3d}" title="${p.name} — interactive 3D" allow="fullscreen"></iframe>
+          <img id="main-img" src="${imgFor(p, 0)}" alt="${p.name}" hidden>
+        </div>` : `
         <div class="thumbs">${[0,1,2,3].map((i) => `<img src="${imgFor(p, i)}" alt="" class="${i===0?'active':''}" onclick="setImage(${i})">`).join("")}</div>
         <div class="main">
           ${onSale(p) ? `<span class="sale-flag">Sale -${salePct(p)}%</span>` : ""}
           <img id="main-img" src="${imgFor(p, 0)}" alt="${p.name}">
-        </div>
+        </div>`}
       </div>
     </div>
     <div>

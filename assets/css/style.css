@@ -210,6 +210,21 @@ h1, h2, h3, h4 { font-weight: 700; line-height: 1.2; }
 .thumbs img.active { border-color: var(--red); }
 .gallery .main { position: relative; }
 .gallery .main img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+.gallery .main iframe { width: 100%; aspect-ratio: 1; border: 0; display: block; background: #060304; }
+.gallery .main iframe[hidden], .gallery .main img[hidden] { display: none; }
+.thumbs .thumb-3d {
+  aspect-ratio: 1; border: 1px solid var(--line); cursor: pointer;
+  background: radial-gradient(80% 80% at 50% 70%, #2a0d13, #14060a);
+  color: #eabf92; font-weight: 700; font-size: .95rem; letter-spacing: .06em;
+  font-family: inherit;
+}
+.thumbs .thumb-3d.active, .thumbs img.thumb.active { border-color: var(--red); }
+.card-img .flag-3d {
+  position: absolute; top: 12px; right: 12px; z-index: 2;
+  background: rgba(18,7,10,.78); color: #eabf92;
+  font-weight: 700; font-size: .75rem; letter-spacing: .1em;
+  padding: 4px 9px;
+}
 .promo-line { color: var(--gold); font-weight: 700; margin-bottom: 14px; }
 .pdp-desc { color: #ddd; }
 .pdp-desc .more { color: var(--red); font-weight: 700; cursor: pointer; }

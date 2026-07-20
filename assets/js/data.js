@@ -124,6 +124,11 @@ const PRODUCTS = [
   { id: "studded-paddle", name: "Studded Leather Paddle", category: "impact", sub: "paddles",
     price: 44.97, compareAt: 54.97, rating: 4.8, hue: 0, icon: "paddle",
     desc: "Double-layer bridle leather with a studded face on one side, smooth on the other. Two moods, one paddle." },
+  { id: "lumina-vita-wand", name: "LUMINA VITA — The Wand, Crimson Edition", category: "sex-toys", sub: "wands",
+    price: 129.0, rating: 5.0, featured: true, best: true, hue: 350, icon: "wand",
+    viewer3d: "assets/3d/lumina-wand.html",
+    images: ["assets/img/lumina-wand-1.jpg", "assets/img/lumina-wand-2.jpg", "assets/img/lumina-wand-3.jpg", "assets/img/lumina-wand-4.jpg"],
+    desc: "Our first boutique collaboration: the LUMINA VITA wand in matte crimson silicone with a rose-gold accent band. Deep, rumbly power wrapped in a silhouette elegant enough to leave on the nightstand — explore it in full interactive 3D before you buy." },
   { id: "mini-pulse-wand", name: "Pulse Point Mini Wand by DK", category: "sex-toys", sub: "wands",
     price: 12.0, compareAt: 16.99, rating: 5.0, featured: true, best: true, hue: 352, icon: "wand",
     desc: "The Pulse Point Mini Wand may be small, but it delivers big, satisfying vibrations exactly where you want them. With ten patterns, a silky silicone head and USB charging, it punches far above its price." },
@@ -177,6 +182,12 @@ const PRODUCTS = [
 /* Seeded reviews for hero products; other products get deterministic
    generated reviews (see app.js). */
 const REVIEWS = {
+  "lumina-vita-wand": [
+    { stars: 5, name: "Elena V.", text: "The 3D preview sold me — and it looks even better in person. Feels like a luxury object." },
+    { stars: 5, name: "Marcus T.", text: "Spun it around on the product page for five minutes straight. The rose-gold ring is real metal, by the way." },
+    { stars: 5, name: "Ruth A.", text: "Quiet, powerful, and genuinely beautiful. The crimson is deeper than the photos show." },
+    { stars: 5, name: "Jo P.", text: "Bought it as a gift, kept it. Sorry, Sam." },
+  ],
   "mini-pulse-wand": [
     { stars: 5, name: "Gabriel B.", text: "For the size it's incredibly powerful" },
     { stars: 5, name: "Dana R.", text: "Bought as a stocking stuffer, became the daily driver." },

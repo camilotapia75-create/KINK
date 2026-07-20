@@ -191,6 +191,7 @@ function productCard(p, list = false) {
   return `<a class="card ${list ? "card-list" : ""}" href="product.html?p=${p.id}">
     <div class="card-img">
       ${onSale(p) ? `<span class="sale-flag">Sale -${salePct(p)}%</span>` : ""}
+      ${p.viewer3d ? '<span class="flag-3d">360°</span>' : ""}
       <img src="${imgFor(p)}" alt="${p.name}" loading="lazy">
     </div>
     <div class="card-info">
