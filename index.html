@@ -65,6 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
   $("#cat-grid").innerHTML = cats.map((c) => {
     const sample = PRODUCTS.find((p) => p.category === c.slug && p.featured) || PRODUCTS.find((p) => p.category === c.slug);
     return `<a class="cat-card" href="category.html?c=${c.slug}">
+      ${sample.viewer3d ? '<span class="flag-3d">360°</span>' : ""}
       <img src="${imgFor(sample, 1)}" alt="${c.name}">
       <div class="cc-body">
         <h3>${c.name}</h3>
